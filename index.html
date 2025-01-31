@@ -3,11 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>O Palavrório</title>
+	<title>Palavrório</title>
+	<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-
+<div class="container">
 
 <h1>Grandiosíssimo Vocabulário Avançado da Sacra Língua Portuguesa</h1>
 
@@ -15,26 +16,23 @@
 <script src="lista-palavras-menor.js"></script>
 <script src="categorias-dicionario.js"></script><!-- var: CATEGORIAS -->
 <script src="dicionario-erudito.js"></script><!-- var: DICIONARIO-->
-
+<script src="search-feature.js"></script>
 
 <script type="text/javascript">
-  const array_sig = JSON.parse(document.getElementById("dicionario").textContent);
+  const array_sig = DICIONARIO;
 
   let json = {};
 
   let str = "";
 
   let i = 0;
-  for (let def of array_sig) {
+  for (let def of DICIONARIO) {
   	json[def.palavra] = {significado: def.significado, categorias: def.categorias || [], id: ++i};
   }
 
   console.info("json", json);
 
 /// ********* ///
-
-	const mae = document.getElementById("mae").textContent.split(",");
-
 	var vistas = [];
 
 	// const REGEX_BLOCK = /\[Linguagem po\ética\]/mg; /*
@@ -44,7 +42,7 @@
 	const GOOGLE_LINK = "https://google.com/search?q={palavra}";
 
 	function criarLink (palavra, site_link) {
-		return `<a target='_blank' href='${site_link.replace("{palavra}", palavra)}'>${palavra}</a>`;
+		return `<a class="link_palavra" target='_blank' href='${site_link.replace("{palavra}", palavra)}'>${palavra}</a>`;
 	}
 
 	function linkarVocabulo (palavra) {
@@ -76,17 +74,19 @@
 			palavra = linkarVocabulo(palavra);
 			significado = linkarFrase(significado);
 
-			let entrada = `<b>${palavra}</b> : ${significado}`;
+			let entrada = `<div class="entrada">` + `<b class="entrada__palavra">${palavra}</b> : <span class="entrada__significado">${significado}</span>` + `</div>`;
 
 			vistas.push(palavra);
 			selecao.push(entrada);
 		}
 
-		document.getElementById("selecao").innerHTML = selecao.join("<br /><br />");
+		document.getElementById("selecao").innerHTML = selecao.join("");
 	}
 
 	function palavraAleatoria() {
-		let palavra = mae[Math.floor(Math.random() * mae.length)];
+		const randomElement = arr => arr.at(Math.random() * arr.length);
+
+		let palavra = randomElement(LISTA_MENOR);
 
 		return (vistas.indexOf(palavra) < 0) ? palavra : palavraAleatoria();
 	}
@@ -124,21 +124,7 @@ Clique para gerar 50 palavras aleatórias.
 
 <script>gerarPalavras()</script>
 
-<style>
-a {
-	cursor: inherit;
-	color: inherit;
-	text-decoration: none;
-}
-
-a:hover {
-	color: #ec008c;
-	cursor: pointer;
-	font-weight: bolder;
-}
-</style>
-
-
+</div container>
 
 </body>
 </html>
